@@ -190,4 +190,6 @@ java blackjack.BlackjackLauncher
 Developed by Romanets Oleksandr form IPZk-24-1 as a final design patterns project in Java.  
 Includes practice with GUI (Swing), OOP principles, and clean code.
 
+![Image alt](https://github.com/kerosene2562/black-jack/raw/main/imgs/strings.png)
+
 ---
