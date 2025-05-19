@@ -112,6 +112,7 @@ public class PlayerActionControlPanel extends JPanel {
 	private class ResetButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			GameLogger.logEvent("Game reset by player.");
+			eventLogPanel.logMessage(gameEngine.getStatistics().getSummary());
 			gameEngine.getCurrentGameState().resetGame();
 			mainLayoutContainer.repaint();
 		}

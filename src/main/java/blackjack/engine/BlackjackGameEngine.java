@@ -8,6 +8,7 @@ import blackjack.state.GameStateRoundEnded;
 import blackjack.model.PlayingCardRepresentation;
 import blackjack.model.StandardDeckCardManager;
 import blackjack.state.GameState;
+import blackjack.stats.PlayerStatisticsTracker;
 import blackjack.util.BlackjackDealer;
 import blackjack.util.BlackjackParticipant;
 
@@ -25,6 +26,8 @@ public class BlackjackGameEngine extends Observable {
 	private GameState gameDealerTurnState;
 	private GameState gameRoundEndState;
 	private GameState currentGameState;
+	private PlayerStatisticsTracker statsTracker;
+
 
 	public BlackjackParticipant primaryPlayer;
 	public BlackjackDealer mainDealer;
@@ -39,6 +42,7 @@ public class BlackjackGameEngine extends Observable {
 		gameDealerTurnState = new GameStateDealerTurn(this);
 		gameRoundEndState = new GameStateRoundEnded(this);
 		currentGameState = gameStartState;
+		statsTracker = new PlayerStatisticsTracker();
 
 		primaryPlayer = new BlackjackParticipant();
 		mainDealer = new BlackjackDealer();
@@ -222,19 +226,28 @@ public class BlackjackGameEngine extends Observable {
 		mainDealer.revealAllDealerCardsToPlayer();
 	}
 
+	public PlayerStatisticsTracker getStatistics() {
+		return statsTracker;
+	}
+
 	public String determineWinnerAnnouncement() {
 		int playerTotal = primaryPlayer.calculateTotalHandValue();
 		int dealerTotal = mainDealer.calculateTotalHandValue();
 
 		if (primaryPlayer.isHandBusted() && !mainDealer.isHandBusted()) {
+			statsTracker.recordLoss();
 			return "Dealer wins!\nClick Reset to try again.";
 		} else if (!primaryPlayer.isHandBusted() && mainDealer.isHandBusted()) {
+			statsTracker.recordWin();
 			return "Player wins!\nClick Reset to try again.";
 		} else if (playerTotal > dealerTotal) {
+			statsTracker.recordWin();
 			return "Player wins!\nClick Reset to try again.";
 		} else if (playerTotal < dealerTotal) {
+			statsTracker.recordLoss();
 			return "Dealer wins!\nClick Reset to try again.";
 		} else {
+			statsTracker.recordDraw();
 			return "It's a tie!\nClick Reset to try again.";
 		}
 	}
