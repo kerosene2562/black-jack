@@ -8,17 +8,20 @@ import java.util.ArrayList;
  * Represents a participant in the Blackjack game (either player or dealer).
  * Maintains the hand of cards and provides methods to assess hand value.
  */
-public class BlackjackParticipant {
+public class BlackjackParticipant
+{
 
 	/** The cards currently held in hand */
 	protected ArrayList<PlayingCardRepresentation> handOfCards;
 
 	/** Constructs a new Blackjack participant with an empty hand */
-	public BlackjackParticipant() {
+	public BlackjackParticipant()
+	{
 		handOfCards = new ArrayList<>();
 	}
 
-	public boolean hasBlackjackImmediately() {
+	public boolean hasBlackjackImmediately()
+	{
 		return handOfCards.size() == 2 && doesHavePerfectBlackjack();
 	}
 
@@ -26,14 +29,16 @@ public class BlackjackParticipant {
 	 * Adds a card to the participant's hand.
 	 * @param card the card to add
 	 */
-	public void acquireCardIntoHand(PlayingCardRepresentation card) {
+	public void acquireCardIntoHand(PlayingCardRepresentation card)
+	{
 		handOfCards.add(card);
 	}
 
 	/**
 	 * Clears the hand of all cards.
 	 */
-	public void discardAllCardsFromHand() {
+	public void discardAllCardsFromHand()
+	{
 		handOfCards.clear();
 	}
 
@@ -41,11 +46,13 @@ public class BlackjackParticipant {
 	 * Calculates the total value of the hand, handling aces appropriately.
 	 * @return total value of cards
 	 */
-	public int calculateTotalHandValue() {
+	public int calculateTotalHandValue()
+	{
 		int totalValue = 0;
 		int aceCount = 0;
 
-		for (PlayingCardRepresentation card : handOfCards) {
+		for (PlayingCardRepresentation card : handOfCards)
+		{
 			String symbol = card.getCardSymbolCode();
 
 			if (symbol.contains("A")) aceCount++;
@@ -63,7 +70,8 @@ public class BlackjackParticipant {
 		}
 
 		// Handle ace value choices
-		for (int i = 0; i < aceCount; i++) {
+		for (int i = 0; i < aceCount; i++)
+		{
 			totalValue += (totalValue + 11 > 21) ? 1 : 11;
 		}
 
@@ -74,7 +82,8 @@ public class BlackjackParticipant {
 	 * Checks if the hand value is over 21.
 	 * @return true if busted
 	 */
-	public boolean isHandBusted() {
+	public boolean isHandBusted()
+	{
 		return calculateTotalHandValue() > 21;
 	}
 
@@ -82,7 +91,8 @@ public class BlackjackParticipant {
 	 * Checks if the participant has exactly 21.
 	 * @return true if hand is blackjack
 	 */
-	public boolean doesHavePerfectBlackjack() {
+	public boolean doesHavePerfectBlackjack()
+	{
 		return calculateTotalHandValue() == 21;
 	}
 
@@ -90,16 +100,19 @@ public class BlackjackParticipant {
 	 * Returns the current hand.
 	 * @return list of cards in hand
 	 */
-	public ArrayList<PlayingCardRepresentation> getHandCards() {
+	public ArrayList<PlayingCardRepresentation> getHandCards()
+	{
 		return handOfCards;
 	}
 
 	/**
 	 * Displays hand to console (debugging/logging).
 	 */
-	public void printHandToConsole() {
+	public void printHandToConsole()
+	{
 		System.out.print("Current Hand: ");
-		for (PlayingCardRepresentation card : handOfCards) {
+		for (PlayingCardRepresentation card : handOfCards)
+		{
 			System.out.print(card + ", ");
 		}
 		System.out.println();
@@ -109,7 +122,8 @@ public class BlackjackParticipant {
 	 * Returns number of cards currently held.
 	 * @return number of cards in hand
 	 */
-	public int getNumberOfCardsInHand() {
+	public int getNumberOfCardsInHand()
+	{
 		return handOfCards.size();
 	}
 }

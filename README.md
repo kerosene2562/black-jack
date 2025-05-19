@@ -2,6 +2,8 @@
 
 A desktop Blackjack game implemented in Java using the **Swing** UI toolkit, featuring robust game logic built on **design patterns**, clean architecture principles, and multiple refactoring techniques.
 
+![Image alt](https://github.com/kerosene2562/black-jack/raw/main/imgs/game.png)
+
 ---
 
 ## Project Overview

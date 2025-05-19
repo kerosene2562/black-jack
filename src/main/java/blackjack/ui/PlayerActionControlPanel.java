@@ -12,7 +12,8 @@ import java.awt.event.ActionListener;
 
  Panel containing action buttons for the player (Deal, Hit, Stay, Reset).
  */
-public class PlayerActionControlPanel extends JPanel {
+public class PlayerActionControlPanel extends JPanel
+{
 	private BlackjackGameEngine gameEngine;
 	private GameEventLogPanel eventLogPanel;
 	private JPanel mainLayoutContainer;
@@ -29,7 +30,8 @@ public class PlayerActionControlPanel extends JPanel {
 	 @param eventLogPanel reference to the game event log display
 	 @param mainLayoutContainer reference to the main UI container
 	 */
-	public PlayerActionControlPanel(BlackjackGameEngine gameEngine, GameEventLogPanel eventLogPanel, JPanel mainLayoutContainer) {
+	public PlayerActionControlPanel(BlackjackGameEngine gameEngine, GameEventLogPanel eventLogPanel, JPanel mainLayoutContainer)
+	{
 		this.gameEngine = gameEngine;
 		this.eventLogPanel = eventLogPanel;
 		this.mainLayoutContainer = mainLayoutContainer;
@@ -52,14 +54,19 @@ public class PlayerActionControlPanel extends JPanel {
 
 	 Action triggered when the Deal button is pressed.
 	 */
-	private class DealButtonHandler implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
+	private class DealButtonHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
 			gameEngine.getCurrentGameState().startGame();
-			if (gameEngine.getPlayer().hasBlackjackImmediately()) {
+			if (gameEngine.getPlayer().hasBlackjackImmediately())
+			{
 				eventLogPanel.logMessage("Player has Blackjack!");
 				eventLogPanel.logMessage("Dealer's Turn");
 				gameEngine.getCurrentGameState().endPlayerTurn();
-			} else {
+			}
+			else
+			{
 				eventLogPanel.logMessage("Player's turn!");
 				String advice = GameAdvisor.advisePlayer(gameEngine.getPlayer().getHandCards());
 				eventLogPanel.logMessage(advice);
@@ -73,9 +80,12 @@ public class PlayerActionControlPanel extends JPanel {
 
 	 Action triggered when the Hit button is pressed.
 	 */
-	private class HitButtonHandler implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (gameEngine.getCurrentGameState().equals(gameEngine.getPlayerTurnState())) {
+	private class HitButtonHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			if (gameEngine.getCurrentGameState().equals(gameEngine.getPlayerTurnState()))
+			{
 				eventLogPanel.logMessage("Player Hits!");
 				gameEngine.drawCardForPlayer();
 
@@ -92,9 +102,12 @@ public class PlayerActionControlPanel extends JPanel {
 
 	 Action triggered when the Stay button is pressed.
 	 */
-	private class StayButtonHandler implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (gameEngine.getCurrentGameState().equals(gameEngine.getPlayerTurnState())) {
+	private class StayButtonHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			if (gameEngine.getCurrentGameState().equals(gameEngine.getPlayerTurnState()))
+			{
 				eventLogPanel.logMessage("Player Stays!");
 				eventLogPanel.logMessage("Dealer's Turn");
 
@@ -109,11 +122,13 @@ public class PlayerActionControlPanel extends JPanel {
 
 	 Action triggered when the Reset button is pressed.
 	 */
-	private class ResetButtonHandler implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
+	private class ResetButtonHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
 			GameLogger.logEvent("Game reset by player.");
-			eventLogPanel.logMessage(gameEngine.getStatistics().getSummary());
 			gameEngine.getCurrentGameState().resetGame();
+			eventLogPanel.logMessage(gameEngine.getStatistics().getSummary());
 			mainLayoutContainer.repaint();
 		}
 	}

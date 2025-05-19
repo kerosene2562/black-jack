@@ -8,9 +8,11 @@ import java.util.Iterator;
  * Singleton class responsible for managing a standard deck of playing cards.
  * Provides shuffling and iteration using the Iterator pattern.
  */
-public class StandardDeckCardManager implements Iterator<PlayingCardRepresentation> {
+public class StandardDeckCardManager implements Iterator<PlayingCardRepresentation>
+{
 
-	private static final String[] DEFAULT_CARD_SYMBOLS = {
+	private static final String[] DEFAULT_CARD_SYMBOLS =
+			{
 			"AC", "AD", "AH", "AS", "2C", "2D", "2H", "2S",
 			"3C", "3D", "3H", "3S", "4C", "4D", "4H", "4S",
 			"5C", "5D", "5H", "5S", "6C", "6D", "6H", "6S",
@@ -18,7 +20,7 @@ public class StandardDeckCardManager implements Iterator<PlayingCardRepresentati
 			"9C", "9D", "9H", "9S", "0C", "0D", "0H", "0S",
 			"JC", "JD", "JH", "JS", "QC", "QD", "QH", "QS",
 			"KC", "KD", "KH", "KS"
-	};
+		};
 
 	private static final int MAXIMUM_CARD_COUNT = 52;
 
@@ -30,7 +32,8 @@ public class StandardDeckCardManager implements Iterator<PlayingCardRepresentati
 	/**
 	 * Private constructor initializes the deck with all standard cards and shuffles them.
 	 */
-	private StandardDeckCardManager() {
+	private StandardDeckCardManager()
+	{
 		cardCollection = new ArrayList<>();
 		initializeStandardDeck();
 		shuffleDeck();
@@ -39,8 +42,10 @@ public class StandardDeckCardManager implements Iterator<PlayingCardRepresentati
 	/**
 	 * Initializes the deck with 52 standard cards.
 	 */
-	private void initializeStandardDeck() {
-		for (String symbol : DEFAULT_CARD_SYMBOLS) {
+	private void initializeStandardDeck()
+	{
+		for (String symbol : DEFAULT_CARD_SYMBOLS)
+		{
 			cardCollection.add(new PlayingCardRepresentation(symbol));
 		}
 	}
@@ -49,17 +54,21 @@ public class StandardDeckCardManager implements Iterator<PlayingCardRepresentati
 	 * Returns the singleton instance of this deck manager.
 	 * @return instance of deck manager
 	 */
-	public static StandardDeckCardManager getInstance() {
-		if (instance == null) {
+	public static StandardDeckCardManager getInstance()
+	{
+		if (instance == null)
+		{
 			instance = new StandardDeckCardManager();
 		}
+
 		return instance;
 	}
 
 	/**
 	 * Randomly shuffles the cards and resets iterator position.
 	 */
-	public void shuffleDeck() {
+	public void shuffleDeck()
+	{
 		Collections.shuffle(cardCollection);
 		currentDeckPosition = 0;
 	}
@@ -69,7 +78,8 @@ public class StandardDeckCardManager implements Iterator<PlayingCardRepresentati
 	 * @return true if more cards are available
 	 */
 	@Override
-	public boolean hasNext() {
+	public boolean hasNext()
+	{
 		return currentDeckPosition < MAXIMUM_CARD_COUNT;
 	}
 
@@ -78,7 +88,8 @@ public class StandardDeckCardManager implements Iterator<PlayingCardRepresentati
 	 * @return the next PlayingCardRepresentation
 	 */
 	@Override
-	public PlayingCardRepresentation next() {
+	public PlayingCardRepresentation next()
+	{
 		PlayingCardRepresentation nextCard = cardCollection.get(currentDeckPosition);
 		currentDeckPosition++;
 		return nextCard;
@@ -88,7 +99,8 @@ public class StandardDeckCardManager implements Iterator<PlayingCardRepresentati
 	 * Allows inspection of remaining card count for debug or game logic.
 	 * @return number of cards left
 	 */
-	public int getRemainingCardCount() {
+	public int getRemainingCardCount()
+	{
 		return MAXIMUM_CARD_COUNT - currentDeckPosition;
 	}
 
@@ -96,7 +108,8 @@ public class StandardDeckCardManager implements Iterator<PlayingCardRepresentati
 	 * Returns a copy of all cards in the deck.
 	 * @return list of all cards
 	 */
-	public ArrayList<PlayingCardRepresentation> getAllCardsSnapshot() {
+	public ArrayList<PlayingCardRepresentation> getAllCardsSnapshot()
+	{
 		return new ArrayList<>(cardCollection);
 	}
 } 

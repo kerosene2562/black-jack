@@ -11,7 +11,8 @@ import java.util.Observer;
 
  Main game window responsible for assembling all UI components and displaying them.
  */
-public class BlackjackGameWindow extends JFrame implements Observer {
+public class BlackjackGameWindow extends JFrame implements Observer
+{
 	private BlackjackGameEngine gameEngine;
 	private JPanel mainLayoutContainer;
 	private BlackjackTableSurface tableSurface;
@@ -23,7 +24,8 @@ public class BlackjackGameWindow extends JFrame implements Observer {
 	 Constructs the main window of the blackjack game.
 	 @param gameEngine reference to the game engine
 	 */
-	public BlackjackGameWindow(BlackjackGameEngine gameEngine) {
+	public BlackjackGameWindow(BlackjackGameEngine gameEngine)
+	{
 		this.gameEngine = gameEngine;
 		mainLayoutContainer = new JPanel(new BorderLayout());
 		tableSurface = new BlackjackTableSurface(this.gameEngine);
@@ -40,11 +42,13 @@ public class BlackjackGameWindow extends JFrame implements Observer {
 		this.setContentPane(mainLayoutContainer);
 		this.setVisible(true);
 	}
-	public JPanel getMainLayoutContainer() {
+	public JPanel getMainLayoutContainer()
+	{
 		return this.mainLayoutContainer;
 	}
 
-	public GameEventLogPanel getEventLogPanel() {
+	public GameEventLogPanel getEventLogPanel()
+	{
 		return this.eventLogPanel;
 	}
 
@@ -53,7 +57,8 @@ public class BlackjackGameWindow extends JFrame implements Observer {
 	 Updates UI components based on observable events from the game engine.
 	 */
 	@Override
-	public void update(Observable o, Object arg) {
+	public void update(Observable o, Object arg)
+	{
 		if (arg.equals("repaint"))
 			this.mainLayoutContainer.repaint();
 		else if (arg.equals("reset game log"))

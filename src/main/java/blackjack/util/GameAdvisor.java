@@ -7,20 +7,24 @@ import java.util.List;
 /**
  * Provides simple strategic suggestions to the player based on their hand value.
  */
-public class GameAdvisor {
+public class GameAdvisor
+{
 
-    public static String advisePlayer(List<PlayingCardRepresentation> hand) {
+    public static String advisePlayer(List<PlayingCardRepresentation> hand)
+    {
         int value = calculateHandValue(hand);
         if (value <= 11) return "Recommendation: Hit.";
         if (value >= 17) return "Recommendation: Stay.";
         return "Use your judgment!";
     }
 
-    private static int calculateHandValue(List<PlayingCardRepresentation> hand) {
+    private static int calculateHandValue(List<PlayingCardRepresentation> hand)
+    {
         int value = 0;
         int aces = 0;
 
-        for (PlayingCardRepresentation card : hand) {
+        for (PlayingCardRepresentation card : hand)
+        {
             String symbol = card.getCardSymbolCode();
             if (symbol.contains("A")) aces++;
             else if (symbol.contains("2")) value += 2;
@@ -34,7 +38,8 @@ public class GameAdvisor {
             else value += 10;
         }
 
-        for (int i = 0; i < aces; i++) {
+        for (int i = 0; i < aces; i++)
+        {
             value += (value + 11 > 21) ? 1 : 11;
         }
 

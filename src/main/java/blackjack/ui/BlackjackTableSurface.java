@@ -9,7 +9,8 @@ import java.awt.*;
 
  Main visual area where player and dealer cards are rendered.
  */
-public class BlackjackTableSurface extends JPanel {
+public class BlackjackTableSurface extends JPanel
+{
 	private BlackjackGameEngine gameEngine;
 	private CardVisualizationPanel dealerCardDisplay;
 	private CardVisualizationPanel playerCardDisplay;
@@ -19,7 +20,8 @@ public class BlackjackTableSurface extends JPanel {
 	 Constructs the table surface and sets up card panels.
 	 @param gameEngine main game engine reference
 	 */
-	public BlackjackTableSurface(BlackjackGameEngine gameEngine) {
+	public BlackjackTableSurface(BlackjackGameEngine gameEngine)
+	{
 		this.gameEngine = gameEngine;
 		this.setLayout(new GridLayout(2, 1));
 		dealerCardDisplay = new CardVisualizationPanel(this.gameEngine.getDealersCards());

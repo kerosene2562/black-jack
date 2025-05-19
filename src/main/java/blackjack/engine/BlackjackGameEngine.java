@@ -19,7 +19,8 @@ import java.util.Observable;
  * Core game engine for running a single instance of Blackjack.
  * Manages states, transitions, players, and card drawing logic.
  */
-public class BlackjackGameEngine extends Observable {
+public class BlackjackGameEngine extends Observable
+{
 
 	private GameState gameStartState;
 	private GameState gamePlayerTurnState;
@@ -28,7 +29,6 @@ public class BlackjackGameEngine extends Observable {
 	private GameState currentGameState;
 	private PlayerStatisticsTracker statsTracker;
 
-
 	public BlackjackParticipant primaryPlayer;
 	public BlackjackDealer mainDealer;
 	private StandardDeckCardManager centralDeckManager;
@@ -36,7 +36,8 @@ public class BlackjackGameEngine extends Observable {
 	/**
 	 * Initializes game engine, state machine, and participants.
 	 */
-	public BlackjackGameEngine() {
+	public BlackjackGameEngine()
+	{
 		gameStartState = new GameStateStart(this);
 		gamePlayerTurnState = new GameStatePlayerTurn(this);
 		gameDealerTurnState = new GameStateDealerTurn(this);
@@ -53,58 +54,70 @@ public class BlackjackGameEngine extends Observable {
 	 * Sets the current game state.
 	 * @param newState the new state to enter
 	 */
-	public void updateGameState(GameState newState) {
+	public void updateGameState(GameState newState)
+	{
 		currentGameState = newState;
 	}
 
-	public GameState getCurrentGameState() {
+	public GameState getCurrentGameState()
+	{
 		return currentGameState;
 	}
 
-	public GameState getStartState() {
+	public GameState getStartState()
+	{
 		return gameStartState;
 	}
 
-	public GameState getPlayerTurnState() {
+	public GameState getPlayerTurnState()
+	{
 		return gamePlayerTurnState;
 	}
 
-	public GameState getDealerTurnState() {
+	public GameState getDealerTurnState()
+	{
 		return gameDealerTurnState;
 	}
 
-	public GameState getRoundEndState() {
+	public GameState getRoundEndState()
+	{
 		return gameRoundEndState;
 	}
 
-	public BlackjackParticipant getPlayer() {
+	public BlackjackParticipant getPlayer()
+	{
 		return primaryPlayer;
 	}
 
-	public ArrayList<PlayingCardRepresentation> getPlayersCards() {
+	public ArrayList<PlayingCardRepresentation> getPlayersCards()
+	{
 		return getCardsHeldByPlayer();
 	}
 
-	public ArrayList<PlayingCardRepresentation> getDealersCards() {
+	public ArrayList<PlayingCardRepresentation> getDealersCards()
+	{
 		return getCardsHeldByDealer();
 	}
 
-	public void runGameLoop() {
+	public void runGameLoop()
+	{
 		beginGameLoopExecution();
 	}
 
-
-	public void broadcastGameLogMessage(String messageContent) {
+	public void broadcastGameLogMessage(String messageContent)
+	{
 		setChanged();
 		notifyObservers(messageContent);
 	}
 
-	public void broadcastUIRepaint() {
+	public void broadcastUIRepaint()
+	{
 		setChanged();
 		notifyObservers("repaint");
 	}
 
-	public void broadcastGameLogReset() {
+	public void broadcastGameLogReset()
+	{
 		setChanged();
 		notifyObservers("reset game log");
 	}
@@ -112,51 +125,69 @@ public class BlackjackGameEngine extends Observable {
 	/**
 	 * Runs the game loop (used for dealer logic and repaint triggering).
 	 */
-	public void beginGameLoopExecution() {
+	public void beginGameLoopExecution()
+	{
 		boolean engineRunning = true;
-		while (engineRunning) {
+		while (engineRunning)
+		{
 
-			if (currentGameState.equals(gamePlayerTurnState)) {
-				if (primaryPlayer.isHandBusted()) {
+			if (currentGameState.equals(gamePlayerTurnState))
+			{
+				if (primaryPlayer.isHandBusted())
+				{
 					broadcastGameLogMessage("Player Busted!\n" + determineWinnerAnnouncement());
 					currentGameState.endRound();
 				}
 
-				if (primaryPlayer.doesHavePerfectBlackjack()) {
+				if (primaryPlayer.doesHavePerfectBlackjack())
+				{
 					broadcastGameLogMessage("Player hits 21!\n" + determineWinnerAnnouncement());
 					currentGameState.endRound();
 				}
 			}
 
-			if (currentGameState.equals(gameDealerTurnState)) {
-				if (isDealerTurnFinished()) {
-					if (mainDealer.doesHavePerfectBlackjack()) {
+			if (currentGameState.equals(gameDealerTurnState))
+			{
+				if (isDealerTurnFinished())
+				{
+					if (mainDealer.doesHavePerfectBlackjack())
+					{
 						broadcastGameLogMessage("Dealer hits 21!\n" + determineWinnerAnnouncement());
-					} else if (mainDealer.isHandBusted()) {
+					}
+					else if (mainDealer.isHandBusted())
+					{
 						broadcastGameLogMessage("Dealer Busted!\n" + determineWinnerAnnouncement());
-					} else {
+					}
+					else
+					{
 						broadcastGameLogMessage("Dealer Holds.\n" + determineWinnerAnnouncement());
 					}
 					currentGameState.endRound();
 				}
 
-				if (!isDealerTurnFinished()) {
+				if (!isDealerTurnFinished())
+				{
 					broadcastGameLogMessage("Dealer draws a card.");
 					drawCardForDealer(false);
-					if (mainDealer.doesHavePerfectBlackjack()) {
+					if (mainDealer.doesHavePerfectBlackjack())
+					{
 						broadcastGameLogMessage("Dealer hits 21!\n" + determineWinnerAnnouncement());
 						currentGameState.endRound();
 					}
-					if (mainDealer.isHandBusted()) {
+					if (mainDealer.isHandBusted())
+					{
 						broadcastGameLogMessage("Dealer Busted!\n" + determineWinnerAnnouncement());
 						currentGameState.endRound();
 					}
 				}
 			}
 
-			try {
+			try
+			{
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e)
+			{
 				e.printStackTrace();
 			}
 
@@ -167,7 +198,8 @@ public class BlackjackGameEngine extends Observable {
 	/**
 	 * Resets game state and hands.
 	 */
-	public void fullyResetGame() {
+	public void fullyResetGame()
+	{
 		reshuffleDeck();
 		primaryPlayer.discardAllCardsFromHand();
 		mainDealer.revealAllDealerCardsToPlayer();
@@ -177,43 +209,54 @@ public class BlackjackGameEngine extends Observable {
 	/**
 	 * Deals two cards each to player and dealer (first dealer card is hidden).
 	 */
-	public void executeCardDealSequence() {
-		for (int i = 0; i < 2; i++) {
+	public void executeCardDealSequence()
+	{
+		for (int i = 0; i < 2; i++)
+		{
 			drawCardForPlayer();
 			drawCardForDealer(i == 0);
 		}
 	}
 
-	public void drawCardForDealer(boolean shouldHideCard) {
-		if (centralDeckManager.hasNext()) {
+	public void drawCardForDealer(boolean shouldHideCard)
+	{
+		if (centralDeckManager.hasNext())
+		{
 			PlayingCardRepresentation drawn = centralDeckManager.next();
-			if (shouldHideCard) {
+			if (shouldHideCard)
+			{
 				drawn.turnCardFaceDown();
 			}
 			mainDealer.acquireCardIntoHand(drawn);
 		}
 	}
 
-	public void drawCardForPlayer() {
-		if (centralDeckManager.hasNext()) {
+	public void drawCardForPlayer()
+	{
+		if (centralDeckManager.hasNext())
+		{
 			PlayingCardRepresentation drawn = centralDeckManager.next();
 			primaryPlayer.acquireCardIntoHand(drawn);
 		}
 	}
 
-	public void reshuffleDeck() {
+	public void reshuffleDeck()
+	{
 		centralDeckManager.shuffleDeck();
 	}
 
-	public ArrayList<PlayingCardRepresentation> getCardsHeldByPlayer() {
+	public ArrayList<PlayingCardRepresentation> getCardsHeldByPlayer()
+	{
 		return primaryPlayer.getHandCards();
 	}
 
-	public ArrayList<PlayingCardRepresentation> getCardsHeldByDealer() {
+	public ArrayList<PlayingCardRepresentation> getCardsHeldByDealer()
+	{
 		return mainDealer.getHandCards();
 	}
 
-	public boolean isDealerTurnFinished() {
+	public boolean isDealerTurnFinished()
+	{
 		int dealerTotal = mainDealer.calculateTotalHandValue();
 		int playerTotal = primaryPlayer.calculateTotalHandValue();
 
@@ -222,31 +265,43 @@ public class BlackjackGameEngine extends Observable {
 				|| (dealerTotal >= 17 && dealerTotal >= playerTotal);
 	}
 
-	public void revealAllDealerCards() {
+	public void revealAllDealerCards()
+	{
 		mainDealer.revealAllDealerCardsToPlayer();
 	}
 
-	public PlayerStatisticsTracker getStatistics() {
+	public PlayerStatisticsTracker getStatistics()
+	{
 		return statsTracker;
 	}
 
-	public String determineWinnerAnnouncement() {
+	public String determineWinnerAnnouncement()
+	{
 		int playerTotal = primaryPlayer.calculateTotalHandValue();
 		int dealerTotal = mainDealer.calculateTotalHandValue();
 
-		if (primaryPlayer.isHandBusted() && !mainDealer.isHandBusted()) {
+		if (primaryPlayer.isHandBusted() && !mainDealer.isHandBusted())
+		{
 			statsTracker.recordLoss();
 			return "Dealer wins!\nClick Reset to try again.";
-		} else if (!primaryPlayer.isHandBusted() && mainDealer.isHandBusted()) {
+		}
+		else if (!primaryPlayer.isHandBusted() && mainDealer.isHandBusted())
+		{
 			statsTracker.recordWin();
 			return "Player wins!\nClick Reset to try again.";
-		} else if (playerTotal > dealerTotal) {
+		}
+		else if (playerTotal > dealerTotal)
+		{
 			statsTracker.recordWin();
 			return "Player wins!\nClick Reset to try again.";
-		} else if (playerTotal < dealerTotal) {
+		}
+		else if (playerTotal < dealerTotal)
+		{
 			statsTracker.recordLoss();
 			return "Dealer wins!\nClick Reset to try again.";
-		} else {
+		}
+		else
+		{
 			statsTracker.recordDraw();
 			return "It's a tie!\nClick Reset to try again.";
 		}
