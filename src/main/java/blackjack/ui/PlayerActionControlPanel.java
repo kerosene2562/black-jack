@@ -18,10 +18,10 @@ public class PlayerActionControlPanel extends JPanel
 	private GameEventLogPanel eventLogPanel;
 	private JPanel mainLayoutContainer;
 
-	private JButton dealButton;
-	private JButton requestCardButton;
-	private JButton holdTurnButton;
-	private JButton restartGameButton;
+	private final JButton dealButton = new JButton("Deal");
+    private final JButton requestCardButton = new JButton("Hit");
+    private final JButton holdTurnButton = new JButton("Stay");
+    private final JButton restartGameButton = new JButton("Reset");
 
 	/**
 
@@ -35,20 +35,29 @@ public class PlayerActionControlPanel extends JPanel
 		this.gameEngine = gameEngine;
 		this.eventLogPanel = eventLogPanel;
 		this.mainLayoutContainer = mainLayoutContainer;
-		dealButton = new JButton("Deal");
-		requestCardButton = new JButton("Hit");
-		holdTurnButton = new JButton("Stay");
-		restartGameButton = new JButton("Reset");
 
-		dealButton.addActionListener(new DealButtonHandler());
-		requestCardButton.addActionListener(new HitButtonHandler());
-		holdTurnButton.addActionListener(new StayButtonHandler());
-		restartGameButton.addActionListener(new ResetButtonHandler());
+		initListeners();
 
 		this.add(dealButton);
 		this.add(requestCardButton);
 		this.add(holdTurnButton);
 		this.add(restartGameButton);
+	}
+
+	private void initListeners() {
+		dealButton.addActionListener(new DealButtonHandler());
+		requestCardButton.addActionListener(new HitButtonHandler());
+		holdTurnButton.addActionListener(new StayButtonHandler());
+		restartGameButton.addActionListener(new ResetButtonHandler());
+	}
+
+	private void logAdvice() {
+		String advice = GameAdvisor.advisePlayer(gameEngine.getPlayer().getHandCards());
+		eventLogPanel.logMessage(advice);
+	}
+
+	private void repaintUI() {
+		mainLayoutContainer.repaint();
 	}
 	/**
 
@@ -68,12 +77,10 @@ public class PlayerActionControlPanel extends JPanel
 			else
 			{
 				eventLogPanel.logMessage("Player's turn!");
-				String advice = GameAdvisor.advisePlayer(gameEngine.getPlayer().getHandCards());
-				eventLogPanel.logMessage(advice);
+				logAdvice();
 				GameLogger.logEvent("New round started. Player cards: " + gameEngine.getPlayer().getHandCards());
-
 			}
-			mainLayoutContainer.repaint();
+			repaintUI();
 		}
 	}
 	/**
@@ -89,12 +96,11 @@ public class PlayerActionControlPanel extends JPanel
 				eventLogPanel.logMessage("Player Hits!");
 				gameEngine.drawCardForPlayer();
 
-				String advice = GameAdvisor.advisePlayer(gameEngine.getPlayer().getHandCards());
-				eventLogPanel.logMessage(advice);
+				logAdvice();
 
 				GameLogger.logEvent("Player chose to Hit. Hand: " + gameEngine.getPlayer().getHandCards());
 
-				mainLayoutContainer.repaint();
+				repaintUI();
 			}
 		}
 	}
@@ -114,7 +120,7 @@ public class PlayerActionControlPanel extends JPanel
 				GameLogger.logEvent("Player chose to Stay.");
 
 				gameEngine.getCurrentGameState().endPlayerTurn();
-				mainLayoutContainer.repaint();
+				repaintUI();
 			}
 		}
 	}
@@ -129,7 +135,7 @@ public class PlayerActionControlPanel extends JPanel
 			GameLogger.logEvent("Game reset by player.");
 			gameEngine.getCurrentGameState().resetGame();
 			eventLogPanel.logMessage(gameEngine.getStatistics().getSummary());
-			mainLayoutContainer.repaint();
+			repaintUI();
 		}
 	}
 }
