@@ -6,11 +6,13 @@ import blackjack.engine.BlackjackGameEngine;
  * State representing the dealer's automated actions.
  * Transitions to round-end when appropriate.
  */
-public class GameStateDealerTurn implements GameState {
+public class GameStateDealerTurn implements GameState
+{
 
 	private BlackjackGameEngine gameEngineContext;
 
-	public GameStateDealerTurn(BlackjackGameEngine gameEngineContext) {
+	public GameStateDealerTurn(BlackjackGameEngine gameEngineContext)
+	{
 		this.gameEngineContext = gameEngineContext;
 	}
 
@@ -18,8 +20,8 @@ public class GameStateDealerTurn implements GameState {
 	 * Starting a game is not valid during dealer turn.
 	 */
 	@Override
-	public void startGame() {
-		// Not applicable — dealer's turn already in progress
+	public void startGame()
+	{
 		gameEngineContext.broadcastGameLogMessage("Cannot start game: dealer is currently playing.");
 	}
 
@@ -27,8 +29,8 @@ public class GameStateDealerTurn implements GameState {
 	 * Ending the player's turn is irrelevant in dealer's turn.
 	 */
 	@Override
-	public void endPlayerTurn() {
-		// Not applicable — already in dealer turn
+	public void endPlayerTurn()
+	{
 		gameEngineContext.broadcastGameLogMessage("Player turn already ended. Dealer is acting.");
 	}
 
@@ -36,7 +38,8 @@ public class GameStateDealerTurn implements GameState {
 	 * Ends the dealer's turn and transitions to the round-end state.
 	 */
 	@Override
-	public void endRound() {
+	public void endRound()
+	{
 		gameEngineContext.broadcastGameLogMessage("Dealer turn finished. Ending round.");
 		gameEngineContext.updateGameState(gameEngineContext.getRoundEndState());
 	}
@@ -45,8 +48,8 @@ public class GameStateDealerTurn implements GameState {
 	 * Resets the game manually from dealer state (not usual).
 	 */
 	@Override
-	public void resetGame() {
-		// Optional fallback — allow force reset from dealer turn
+	public void resetGame()
+	{
 		gameEngineContext.broadcastGameLogMessage("Game reset during dealer's turn.");
 		gameEngineContext.fullyResetGame();
 		gameEngineContext.updateGameState(gameEngineContext.getStartState());

@@ -22,15 +22,21 @@ import java.util.Observable;
 public class BlackjackGameEngine extends Observable
 {
 
+	// Game states
 	private GameState gameStartState;
 	private GameState gamePlayerTurnState;
 	private GameState gameDealerTurnState;
 	private GameState gameRoundEndState;
 	private GameState currentGameState;
+
+	// Game statistics tracker
 	private PlayerStatisticsTracker statsTracker;
 
+	// Game participants
 	public BlackjackParticipant primaryPlayer;
 	public BlackjackDealer mainDealer;
+
+	// Card deck
 	private StandardDeckCardManager centralDeckManager;
 
 	/**
@@ -51,71 +57,105 @@ public class BlackjackGameEngine extends Observable
 	}
 
 	/**
-	 * Sets the current game state.
-	 * @param newState the new state to enter
+	 * Updates the game to a new state.
 	 */
 	public void updateGameState(GameState newState)
 	{
 		currentGameState = newState;
 	}
 
+	/**
+	 * Returns the current active game state.
+	 */
 	public GameState getCurrentGameState()
 	{
 		return currentGameState;
 	}
 
+	/**
+	 * Returns the initial game state (before deal).
+	 */
 	public GameState getStartState()
 	{
 		return gameStartState;
 	}
 
+	/**
+	 * Returns the player turn game state.
+	 */
 	public GameState getPlayerTurnState()
 	{
 		return gamePlayerTurnState;
 	}
 
+	/**
+	 * Returns the dealer turn game state.
+	 */
 	public GameState getDealerTurnState()
 	{
 		return gameDealerTurnState;
 	}
 
+	/**
+	 * Returns the round end game state.
+	 */
 	public GameState getRoundEndState()
 	{
 		return gameRoundEndState;
 	}
 
+	/**
+	 * Returns the player participant object.
+	 */
 	public BlackjackParticipant getPlayer()
 	{
 		return primaryPlayer;
 	}
 
+	/**
+	 * Returns cards currently held by the player.
+	 */
 	public ArrayList<PlayingCardRepresentation> getPlayersCards()
 	{
 		return getCardsHeldByPlayer();
 	}
 
+	/**
+	 * Returns cards currently held by the dealer.
+	 */
 	public ArrayList<PlayingCardRepresentation> getDealersCards()
 	{
 		return getCardsHeldByDealer();
 	}
 
-	public void runGameLoop()
-	{
+	/**
+	 * Starts the main game loop (used for dealer's automatic actions).
+	 */
+	public void runGameLoop() {
 		beginGameLoopExecution();
 	}
 
+	/**
+	 * Notifies observers (e.g., UI) with a log message.
+	 */
 	public void broadcastGameLogMessage(String messageContent)
 	{
 		setChanged();
 		notifyObservers(messageContent);
 	}
 
+	/**
+	 * Requests the UI to repaint (refresh display).
+	 */
 	public void broadcastUIRepaint()
 	{
 		setChanged();
 		notifyObservers("repaint");
 	}
 
+	/**
+	 * Notifies observers to reset the game log (typically clears event log panel).
+	 */
 	public void broadcastGameLogReset()
 	{
 		setChanged();
@@ -123,14 +163,16 @@ public class BlackjackGameEngine extends Observable
 	}
 
 	/**
-	 * Runs the game loop (used for dealer logic and repaint triggering).
+	 * Executes the game loop, mainly handling dealer AI actions and transitions.
 	 */
 	public void beginGameLoopExecution()
 	{
 		boolean engineRunning = true;
 		while (engineRunning)
 		{
-
+			/**
+			 * Player turn logic
+			 */
 			if (currentGameState.equals(gamePlayerTurnState))
 			{
 				if (primaryPlayer.isHandBusted())
@@ -138,14 +180,15 @@ public class BlackjackGameEngine extends Observable
 					broadcastGameLogMessage("Player Busted!\n" + determineWinnerAnnouncement());
 					currentGameState.endRound();
 				}
-
 				if (primaryPlayer.doesHavePerfectBlackjack())
 				{
 					broadcastGameLogMessage("Player hits 21!\n" + determineWinnerAnnouncement());
 					currentGameState.endRound();
 				}
 			}
-
+			/**
+			 * Dealer turn logic
+			 */
 			if (currentGameState.equals(gameDealerTurnState))
 			{
 				if (isDealerTurnFinished())
@@ -196,7 +239,7 @@ public class BlackjackGameEngine extends Observable
 	}
 
 	/**
-	 * Resets game state and hands.
+	 * Fully resets the game by reshuffling the deck and clearing all hands.
 	 */
 	public void fullyResetGame()
 	{
@@ -207,7 +250,7 @@ public class BlackjackGameEngine extends Observable
 	}
 
 	/**
-	 * Deals two cards each to player and dealer (first dealer card is hidden).
+	 * Deals two cards to each participant. First dealer card is hidden.
 	 */
 	public void executeCardDealSequence()
 	{
@@ -218,6 +261,10 @@ public class BlackjackGameEngine extends Observable
 		}
 	}
 
+	/**
+	 * Draws a card for the dealer. Can be hidden (face-down).
+	 * @param shouldHideCard whether the card should be turned face-down
+	 */
 	public void drawCardForDealer(boolean shouldHideCard)
 	{
 		if (centralDeckManager.hasNext())
@@ -231,6 +278,9 @@ public class BlackjackGameEngine extends Observable
 		}
 	}
 
+	/**
+	 * Draws a visible card for the player.
+	 */
 	public void drawCardForPlayer()
 	{
 		if (centralDeckManager.hasNext())
@@ -240,21 +290,34 @@ public class BlackjackGameEngine extends Observable
 		}
 	}
 
+	/**
+	 * Shuffles the central deck and resets iterator.
+	 */
 	public void reshuffleDeck()
 	{
 		centralDeckManager.shuffleDeck();
 	}
 
+	/**
+	 * Returns the player's current hand.
+	 */
 	public ArrayList<PlayingCardRepresentation> getCardsHeldByPlayer()
 	{
 		return primaryPlayer.getHandCards();
 	}
 
+	/**
+	 * Returns the dealer's current hand.
+	 */
 	public ArrayList<PlayingCardRepresentation> getCardsHeldByDealer()
 	{
 		return mainDealer.getHandCards();
 	}
 
+	/**
+	 * Checks if the dealer is done drawing cards.
+	 * @return true if dealer should stop drawing, false otherwise
+	 */
 	public boolean isDealerTurnFinished()
 	{
 		int dealerTotal = mainDealer.calculateTotalHandValue();
@@ -265,16 +328,27 @@ public class BlackjackGameEngine extends Observable
 				|| (dealerTotal >= 17 && dealerTotal >= playerTotal);
 	}
 
+	/**
+	 * Reveals all hidden cards in the dealer's hand.
+	 */
 	public void revealAllDealerCards()
 	{
 		mainDealer.revealAllDealerCardsToPlayer();
 	}
 
+	/**
+	 * Returns the game statistics tracker (wins/losses/draws).
+	 */
 	public PlayerStatisticsTracker getStatistics()
 	{
 		return statsTracker;
 	}
 
+	/**
+	 * Determines the winner based on hand values and bust conditions.
+	 * Updates statistics accordingly.
+	 * @return result message for the game log
+	 */
 	public String determineWinnerAnnouncement()
 	{
 		int playerTotal = primaryPlayer.calculateTotalHandValue();
@@ -306,4 +380,4 @@ public class BlackjackGameEngine extends Observable
 			return "It's a tie!\nClick Reset to try again.";
 		}
 	}
-} 
+}
