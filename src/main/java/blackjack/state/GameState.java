@@ -7,5 +7,3 @@ public interface GameState
 	public void endRound();
 	public void resetGame();
 }
-
-
