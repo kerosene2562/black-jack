@@ -22,7 +22,7 @@ This is a complete Blackjack game with:
 
 ### Singleton Pattern
 
-**Where:** `StandardDeckCardManager`  
+**Where:** [StandardDeckCardManager](src/main/java/blackjack/model/StandardDeckCardManager.java)
 **Purpose:** Ensure only one instance of the card deck exists.
 
 ```java
@@ -38,7 +38,7 @@ public static StandardDeckCardManager getInstance() {
 
 ### Iterator Pattern
 
-**Where:** `StandardDeckCardManager`  
+**Where:** [StandardDeckCardManager](src/main/java/blackjack/model/StandardDeckCardManager.java)
 **Purpose:** Sequential access to cards.
 
 ```java
@@ -55,7 +55,7 @@ public PlayingCardRepresentation next() {
 
 ### State Pattern
 
-**Where:** `GameState` interface and its implementations (`GameStateStart`, `GameStatePlayerTurn`, etc.)
+**Where:** [GameState](src/main/java/blackjack/state/GameState.java) interface and its implementations ([GameStateStart](src/main/java/blackjack/state/GameStateStart.java), [GameStatePlayerTurn](src/main/java/blackjack/state/GameStatePlayerTurn.java), etc.)
 
 **Purpose:** Represent different phases of the game via classes, allowing transitions without conditionals.
 
@@ -67,7 +67,7 @@ gameEngine.updateGameState(gameEngine.getDealerTurnState());
 
 ### Observer Pattern
 
-**Where:** `BlackjackGameEngine` → `BlackjackGameWindow`  
+**Where:** [BlackjackGameEngine](src/main/java/blackjack/engine/BlackjackGameEngine.java) → [BlackjackGameWindow](src/main/java/blackjack/ui/BlackjackGameWindow.java)
 **Purpose:** Decouple UI from game logic and notify observers when game state changes.
 
 ```java
